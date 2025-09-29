@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <?!= include('Stylesheet'); ?>
+  </head>
+  <body>
+    <label for="patients">Patient :</label>
+    <select name="patients" id="patients">
+      <? for(var i = 0; i < patients.length; i++){ ?>
+        <option value="<?= patients[i].name ?>" <? if(patients[i].id == selected){ ?> selected <? } ?> >
+          <?= patients[i].name ?>
+        </option>        
+      <? } ?>
+    </select><br><br>
+
+    <label for="date">Date :</label>
+    <input id="date" type="date" name="date" value="<?= date ?>"><br><br>
+
+    <label for="time">Heure :</label>
+    <input id="time" type="time" name="time" value="<?= time ?>"><br><br>
+
+    <label for="natures">Nature :</label>
+    <select name="natures" id="natures">
+      <? for(var j = 0; j < prestations.length; j++){ ?>
+        <option value="<?= prestations[j].name ?>" >
+          <?= prestations[j].name ?>
+        </option>        
+      <? } ?>
+    </select><br><br>
+
+    <hr><br>
+
+    <label for="factures">Une facture doit-elle être générée pour cette séance ?
+      <input type="checkbox" name="factures" id="factures">
+    </label><br><br>
+
+    
+    <label for="cash">Cette séance est-elle immédiatement réglée en cash ?
+      <input type="checkbox" name="cash" id="cash">
+    </label><br><br>
+    
+    <input type="button" value="Ajouter" onclick="ajouter()">
+
+    <span class="annuler" onclick="google.script.host.close()">Annuler</span>
+
+    <p id="success" style="color:green; display:none;"></p>
+    <p id="failure" style="color:red; display:none;"></p>    
+
+    <script>
+      function success(id){
+        var textS = document.getElementById("success")
+        var textF = document.getElementById("failure")
+
+        textS.innerText = "Séance "+id+" générée !"
+        textS.style.display = "block";
+        textF.style.display = "none";
+      }
+
+      function failure(error){
+        var textS = document.getElementById("success")
+        var textF = document.getElementById("failure")
+        
+        textS.style.display = "none";
+        textF.innerText = "Erreur de génération de la séance! "+error
+        textF.style.display = "block";
+      }
+
+      function ajouter(){
+        var dateInput = document.getElementById("date")
+        var dateValue = dateInput.value
+        var timeInput = document.getElementById("time")
+        var timeValue = timeInput.value
+        var natureSelect = document.getElementById("natures")
+        var natureValue = natureSelect.options[natureSelect.selectedIndex].value
+        var patientSelect = document.getElementById("patients")
+        var patientValue = patientSelect.options[patientSelect.selectedIndex].value   
+        var facture = document.getElementById("factures").checked 
+        var cash = document.getElementById("cash").checked       
+        
+        var tab = [dateValue,timeValue,natureValue,patientValue,facture,cash]
+        google.script.run.withSuccessHandler(success).withFailureHandler(failure).ajouterSeance(tab);
+      }
+    </script>
+  </body>
+</html>

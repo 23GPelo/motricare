@@ -1,0 +1,25 @@
+<form id="myForm" class="p-2 border border-light rounded bg-light" onsubmit="handleFormSubmit(this)"> <!-- Call JavaScript function "handleFormSubmit" -->
+    <p class="h4 mb-4 text-center">Gestionnaire de prestations</p>
+    <div id="message"></div>
+    <input type="text" id="RecId" name="RecId" value="" style="display: none">
+
+	<div class="form-group col-md-6">
+		<label for="dateOfPrestation">Date de la prestation</label>
+		<input type="date" class="form-control" id="dateOfPrestation" name="dateOfPrestation">
+	</div>
+	<div class="form-group col-md-6">
+    <label for="exampleFormControlSelect1">Patient</label>
+    <select class="form-control" id="patient" name="patient">
+      <option>Sélectionner un patient</option>
+    </select>
+  </div>
+  <div class="form-group col-md-6">
+    <label for="exampleFormControlSelect1">Prestation</label>
+    <select class="form-control" id="prestation" name="prestation">
+      <option>Sélectionner une prestation</option>
+    </select>
+  </div>
+
+	<button type="submit" class="btn btn-primary">Submit</button>
+    <input class="btn btn-secondary" type="reset" value="Reset">
+</form>

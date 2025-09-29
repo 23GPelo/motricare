@@ -1,0 +1,130 @@
+<script>
+  // Prevent forms from submitting.
+  function preventFormSubmit() {
+    var forms = document.querySelectorAll('form');
+    for (var i = 0; i < forms.length; i++) {
+      forms[i].addEventListener('submit', function(event) {
+      event.preventDefault();
+      });
+    }
+  }
+  window.addEventListener("load", functionInit, true); 
+  
+  //INITIALIZE FUNCTIONS ONLOAD
+  function functionInit(){  
+    preventFormSubmit();
+    getLastTenRows();
+  };      
+  
+  //HANDLE FORM SUBMISSION
+  function handleFormSubmit(formObject) {
+    google.script.run.withSuccessHandler(createTable).processForm(formObject);
+    document.getElementById("myForm").reset();
+  }
+  
+  //GET LAST 10 ROWS
+  function getLastTenRows (){
+   google.script.run.withSuccessHandler(createTable).getLastTenRows();
+  }
+  
+  
+  //GET ALL DATA
+  function getAllData(){
+    //document.getElementById('dataTable').innerHTML = "";
+    google.script.run.withSuccessHandler(createTable).getAllData();
+  }
+  
+  
+  //CREATE THE DATA TABLE
+  function createTable(dataArray) {
+    if(dataArray){
+      var result = "<table class='table table-sm' style='font-size:0.8em'>"+
+                   "<thead style='white-space: nowrap'>"+
+                     "<tr>"+                               //Change table headings to match witht he Google Sheet
+                      "<th scope='col'></th>"+
+                      "<th scope='col'></th>"+
+                      "<th scope='col'></th>"+
+                      "<th scope='col'>ID</th>"+
+                      "<th scope='col'>Nom</th>"+
+                      "<th scope='col'>Genre</th>"+
+                      "<th scope='col'>Date de naissance</th>"+
+                      "<th scope='col'>Email</th>"+
+                      "<th scope='col'>Téléphone</th>"+
+                      "<th scope='col'>Adresse</th>"+
+                    "</tr>"+
+                  "</thead>";
+      for(var i=0; i<dataArray.length; i++) {
+          result += "<tr>";
+          result += "<td><button type='button' class='btn btn-danger btn-xs deleteBtn' onclick='deleteData(this);'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-trash' viewBox='0 0 16 16'><path d='M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z'/><path fill-rule='evenodd' d='M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z'/></svg></button></td>";
+          
+          
+          
+          
+          result += "<td><button type='button' class='btn btn-warning btn-xs editBtn' onclick='editData(this);'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-pen' viewBox='0 0 16 16'><path d='m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001zm-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708l-1.585-1.585z'/></svg></button></td>";
+
+
+
+          result += "<td><button type='button' class='btn btn-success btn-xs editBtn' onclick= 'seeData(this);'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-eye' viewBox='0 0 16 16'><path d='M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z'/><path d='M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z'/></svg></button></td>";
+
+          for(var j=0; j<dataArray[i].length; j++){
+              result += "<td>"+dataArray[i][j]+"</td>";
+          }
+          result += "</tr>";
+      }
+      result += "</table>";
+      var div = document.getElementById('dataTable');
+      div.innerHTML = result;
+      document.getElementById("message").innerHTML = "";
+    }else{
+      var div = document.getElementById('dataTable');
+      div.innerHTML = "Data not found!";
+    }
+  }
+
+  //DELETE DATA
+  function deleteData(el) {
+    var result = confirm("Want to delete?");
+    if (result) {
+      var recordId = el.parentNode.parentNode.cells[3].innerHTML;
+      google.script.run.withSuccessHandler(createTable).deleteData(recordId);
+    }
+  }
+  
+  
+  //EDIT DATA
+  function editData(el){
+    var recordId = el.parentNode.parentNode.cells[3].innerHTML; //https://stackoverflow.com/a/32377357/2391195
+    google.script.run.withSuccessHandler(populateForm).getRecordById(recordId);
+  }
+
+   //SEE DATA
+  function seeData(el){
+    var recordId = el.parentNode.parentNode.cells[3].innerHTML; //https://stackoverflow.com/a/32377357/2391195
+    google.script.run.withSuccessHandler(goToSee).getRecordById(recordId);
+  }
+
+  function goToSee(record){
+
+    var link = "https://script.google.com/macros/s/AKfycbz6VS7X4YiDRAjGUCYNzXjPE5_dgrnFkbu4uFM0-uQ/dev?v=board&i="+record[0][0]
+    var a = document.createElement('a')
+    a.href = link
+    var parentRandom = document.getElementById('rand')
+    parentRandom.appendChild(a)
+    a.click()
+    console.log(link)
+    return;
+  }
+
+  //POPULATE FORM
+  function populateForm(records){
+    document.getElementById('RecId').value = records[0][0];
+    document.getElementById('name').value = records[0][1];
+    document.getElementById(records[0][2]).checked = true;
+    document.getElementById('dateOfBirth').value = records[0][3];
+    document.getElementById('email').value = records[0][4];
+    document.getElementById('phone').value = records[0][5];
+    document.getElementById("adress").value = records[0][6];
+    document.getElementById("message").innerHTML = "<div class='alert alert-warning' role='alert'>Update Record [ID: "+records[0][0]+"]</div>";
+  }
+  
+</script>

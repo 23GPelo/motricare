@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <base target="_top">
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o" crossorigin="anonymous"></script>
+        <?!= include('JavaScriptSeances'); ?> <!-- See JavaScript.html file -->
+        <?!= include('CSS'); ?> <!-- See CSS.html file -->
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-5">
+                  <div id="patient_id">         <?= patient.id ?></div>
+                  <div id="patient_name">       <?= patient.name ?></div>
+                  <div id="patient_genre">      <?= patient.genre ?></div>
+                  <div id="patient_date">       <?= patient.date ?></div>
+                  <div id="patient_email">      <?= patient.email ?></div>
+                  <div id="patient_telephone">  <?= patient.telephone ?></div>
+                  <div id="patient_adress">     <?= patient.adresse ?></div>                
+                </div>
+                <div class="col-lg-5">
+                  <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th class="col">Date de séance</th>
+                        <th class="col">Nature de prestation</th>
+                        <th class="col">Status</th></tr></thead>
+                  <? for(var i = 0; i < seances.length; i++){ ?> 
+                    <tbody><tr>
+                      <th class="row" ><?= seances[i].date ?></th> 
+                      <td><?= seances[i].nature ?></td>
+                      <td><?= seances[i].status ?></td>
+                    </tr></tbody>
+                  <? } ?>
+                  </table>
+                </div>
+            </div>      
+        </div>
+    </body>
+</html>

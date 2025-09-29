@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <?!= include('Stylesheet'); ?>
+  </head>
+  <body>
+    <label for="patients">Patient :</label>
+    <select name="patients" id="patients">
+      <? for(var i = 0; i < patients.length; i++){ ?>
+        <option value="<?= patients[i] ?>"><?= patients[i] ?></option>        
+      <? } ?>
+    </select> 
+    <br><br>
+    <div style="inline-block" id="regles">
+      <label for="reglements">Mode de réglement :</label>
+      <select name="reglements" id="reglements">
+        <? for(var j = 0; j < reglements.length; j++){ ?>
+          <option value="<?= reglements[j].modalite ?>" ><?= reglements[j].modalite ?></option>        
+        <? } ?>
+      </select> 
+      <br><br>
+      <label for="amount">Montant :</label>
+      <input type="number" id="amount" value="0" min="0" step="5">
+      <br/><br/>
+      <label for="reference">Référence :</label>
+      <input type="text" id="reference">
+      <label for="commentaire">Commentaire :</label>
+      <input type="text" id="commentaire">
+    </div>
+    <hr/><br>
+
+    <input type="button" value="Générer" onclick="sendSettlementBackEnd()">
+
+    <span class="annuler" onclick="google.script.host.close()">Annuler</span>
+
+    <p id="success" style="color:green; display:none;"></p>
+    <p id="failure" style="color:red; display:none;"></p>    
+
+    <script>
+      function success(id){
+        var textS = document.getElementById("success")
+        var textF = document.getElementById("failure")
+
+        textS.innerText = "Reglement "+id+" générée !"
+        textS.style.display = "block";
+
+        textF.style.display = "none";
+      }
+
+      function failure(error){
+        var textS = document.getElementById("success")
+        var textF = document.getElementById("failure")
+        
+        textS.style.display = "none";
+        textF.innerText = "Erreur d'enregistrement de paiement ! "+error
+        textF.style.display = "block";
+      }
+
+      function displayCheckboxes(){
+        var selector = document.getElementById("patients");      
+        var value = selector.options[selector.selectedIndex].value;
+        var checkboxes = document.querySelectorAll('div.box');
+        for (var checkbox of checkboxes) {
+          checkbox.checked = false
+          checkbox.style.display = checkbox.id == value ? "block" : "none"
+        }
+      }
+      
+
+      function sendSettlementBackEnd() {
+        console.log("click")
+        var mode = document.querySelector("#reglements").value
+        var amount = document.querySelector("#amount").value
+        var reference = document.querySelector("#reference").value
+        var commentaire = document.querySelector("#commentaire").value
+        var patient = document.querySelector("#patients").options[document.querySelector("#patients").selectedIndex].value
+        var reglement = {
+          "table" : "reglements",
+          "mode" : mode,
+          "amount" : amount,
+          "reference" : reference,
+          "commentaire" : commentaire,
+          "patient" : patient
+        }         
+        google.script.run.withSuccessHandler(success).withFailureHandler(failure).addDatabase(reglement);
+      }
+
+      var selector = document.getElementById("patients");      
+      selector.addEventListener("change", displayCheckboxes);
+      displayCheckboxes()
+     
+    </script>
+  </body>
+</html>

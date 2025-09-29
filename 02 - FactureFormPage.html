@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <?!= include('Stylesheet'); ?>
+  </head>
+  <body>
+    <label for="patients">Patient :</label>
+    <select name="patients" id="patients">
+        <option value="<?= patients[i] ?>" selected>
+      <? for(var i = 0; i < patients.length; i++){ ?>
+        <option value="<?= patients[i] ?>">
+          <?= patients[i] ?>
+        </option>        
+      <? } ?>
+    </select> 
+    <br><br>
+    <div>
+      <? for(var i = 0; i < seances.length; i++){ ?>
+          <div style="display:none" class="box" id="<?= seances[i].patient ?>">
+            <input type="checkbox" class="sceances" value="<?= seances[i].id ?>">
+            <label><?= Utilities.formatDate(seances[i].date, "GMT+2", "dd/MM/yyyy") ?> - <?= Utilities.formatDate(seances[i].heure, "GMT+2", "hh:mm") ?> - <?= seances[i].prestation ?></label>      
+          </div>  
+      <? } ?>
+    </div>
+
+    <br><hr/><br/>
+
+    <input type="button" value="Générer" onclick="generer()">
+
+    <span class="annuler" onclick="google.script.host.close()">Annuler</span>
+
+    <p id="success" style="color:green; display:none;"></p>
+    <p id="failure" style="color:red; display:none;"></p>    
+
+    <script>
+      function success(id){
+        var textS = document.getElementById("success")
+        var textF = document.getElementById("failure")
+
+        textS.innerText = "Facture "+id+" générée !"
+        textS.style.display = "block";
+
+        textF.style.display = "none";
+      }
+
+      function failure(error){
+        var textS = document.getElementById("success")
+        var textF = document.getElementById("failure")
+        
+        textS.style.display = "none";
+        textF.innerText = "Erreur de génération de la facture ! "+error
+        textF.style.display = "block";
+      }
+
+      function displayCheckboxes(){
+        var selector = document.getElementById("patients");      
+        var value = selector.options[selector.selectedIndex].value;
+        var checkboxes = document.querySelectorAll('div.box');
+        for (var checkbox of checkboxes) {
+          checkbox.style.display = checkbox.id == value ? "block" : "none"
+        }
+      }
+
+      function generer() {
+        var tab = []
+        var selector = document.getElementById("patients");      
+        var value = selector.options[selector.selectedIndex].value;
+        var checkboxes = document.querySelectorAll('input[type=checkbox]:checked');
+        for (var checkbox of checkboxes) {
+          tab.push(checkbox.value)
+        }    
+        google.script.run.withSuccessHandler(success).withFailureHandler(failure).tes(tab);
+      }
+
+      var selector = document.getElementById("patients");      
+      selector.addEventListener("change", displayCheckboxes);
+      displayCheckboxes()
+     
+    </script>
+  </body>
+</html>
