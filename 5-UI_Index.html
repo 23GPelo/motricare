@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!-- Inclut la feuille de style -->
+    <?!= HtmlService.createHtmlOutputFromFile('5-UI_Stylesheet.css.html').getContent(); ?>
+  </head>
+  <body>
+    <nav>
+      <div class="logo">Motricare</div>
+      <ul>
+        <!-- MISE À JOUR DE LA NAVIGATION -->
+        <li><a href="#dashboard">Tableau de Bord</a></li>
+        <li><a href="#patients">Patients</a></li>
+        <li><a href="#billing">Facturation</a></li>
+        <li><a href="#calendar">Agenda</a></li>
+      </ul>
+    </nav>
+    <main id="app-content">
+      <!-- Le contenu dynamique sera injecté ici par JavaScript -->
+    </main>
+    
+    <!-- La structure de la modale reste la même -->
+    <div id="modal-overlay" class="modal-overlay">
+      <div class="modal-content">
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+        <div id="modal-body"></div>
+      </div>
+    </div>
+
+    <!-- Inclut le script JavaScript principal -->
+    <?!= HtmlService.createHtmlOutputFromFile('5-UI_Client.js.html').getContent(); ?>
+  </body>
+</html>

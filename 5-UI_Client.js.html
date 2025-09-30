@@ -1,0 +1,39 @@
+<script>
+// ... (début du fichier, api, modal, etc. restent les mêmes) ...
+
+  // --- ROUTEUR ---
+  // Aiguille l'application vers la bonne fonction d'affichage en fonction de l'URL.
+  // **MODIFICATION MAJEURE**: Le routeur est maintenant async et gère les erreurs.
+  async function router() {
+    const content = document.getElementById('app-content');
+    content.innerHTML = '<div class="loader">Chargement...</div>';
+    
+    try {
+      const route = window.location.hash.substring(1) || 'dashboard'; // Tableau de bord par défaut
+      
+      if (route.startsWith('patient/')) {
+        const patientId = route.split('/')[1];
+        await renderPatientProfilePage(patientId);
+      } else if (route === 'patients') {
+        await renderPatientListPage();
+      } else if (route === 'billing') {
+        await renderBillingPage();
+      } else if (route === 'calendar') {
+        await renderCalendarPage();
+      } else {
+        await renderDashboardPage();
+      }
+    } catch (error) {
+      // Si une erreur se produit pendant le rendu de n'importe quelle page,
+      // elle sera interceptée ici et un message clair sera affiché.
+      console.error("Erreur de routage ou de rendu:", error);
+      content.innerHTML = `<div class="error">
+          <h2>Oups, une erreur est survenue</h2>
+          <p>${error.message}</p>
+        </div>`;
+    }
+  }
+  
+// ... (toutes les autres fonctions restent inchangées) ...
+
+</script>
